@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device OTA Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        input[type="file"] {
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Device OTA Update</h1>
+        
+        <!-- File upload input -->
+        <input type="file" id="fileInput" accept=".bin" />
+        
+        <!-- Upload Button -->
+        <button class="button" id="uploadBtn">Upload File</button>
+        
+        <!-- Send OTA Button -->
+        <button class="button" id="sendOtaBtn" disabled>Send to Update Device</button>
+    </div>
+
+    <script>
+        const uploadBtn = document.getElementById('uploadBtn');
+        const sendOtaBtn = document.getElementById('sendOtaBtn');
+        const fileInput = document.getElementById('fileInput');
+
+        let selectedFile = null;
+
+        // Handle file selection
+        fileInput.addEventListener('change', function () {
+            selectedFile = fileInput.files[0];
+            if (selectedFile) {
+                sendOtaBtn.disabled = false; // Enable send button after file selection
+            }
+        });
+
+        // Handle file upload
+        uploadBtn.addEventListener('click', function () {
+            if (!selectedFile) {
+                alert("Please select a file first!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            // Simulate file upload with an XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload', true); // Assuming '/upload' handles file upload on the server
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert("File uploaded successfully!");
+                } else {
+                    alert("Failed to upload file!");
+                }
+            };
+            xhr.send(formData);
+        });
+
+        // Handle OTA update
+        sendOtaBtn.addEventListener('click', function () {
+            if (!selectedFile) {
+                alert("Please select a file first!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('binFile', selectedFile);
+
+            // Simulate sending OTA update with an XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/updateDevice', true); // Assuming '/updateDevice' triggers the OTA update
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    alert("Device updated successfully!");
+                } else {
+                    alert("Failed to send update to device!");
+                }
+            };
+            xhr.send(formData);
+        });
+    </script>
+
+</body>
+</html>
